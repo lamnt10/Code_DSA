@@ -1,0 +1,1 @@
+{"name":"Local: Cay_nhi_phan","url":"c:\\Users\\Lenovo\\OneDrive\\Desktop\\DSA\\Cay_nhi_phan.cpp","tests":[{"id":1776010735331,"input":"2\n2\n1 2 R 1 3 L\n4\n10 20 L 10 30 R 20 40 L 20 60 R\n","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\Lenovo\\OneDrive\\Desktop\\DSA\\Cay_nhi_phan.cpp","group":"local","local":true}
