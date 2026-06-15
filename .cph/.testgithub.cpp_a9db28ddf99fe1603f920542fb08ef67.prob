@@ -1,0 +1,1 @@
+{"name":"Local: testgithub","url":"/home/lam/Documents/Code_DSA/testgithub.cpp","tests":[{"id":1781535624185,"input":"5 50\n5 10 15 20 25","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/lam/Documents/Code_DSA/testgithub.cpp","group":"local","local":true}
