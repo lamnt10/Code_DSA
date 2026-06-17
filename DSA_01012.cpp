@@ -5,11 +5,17 @@ int main(){
     int t;cin >> t;
     while(t--){
         int n;cin >> n;
-        int sl=pow(2,n);
-        for(int i=1;i<=sl;i++){
-            for(int i=1;i<=n;i++){
-                
+        vector<string> v;
+        v.push_back("0");
+        v.push_back("1");
+        for(int i=2;i<=n;i++){
+            for(int i=v.size()-1;i>=0;i--){
+                v.push_back("1"+v[i]);
+                v[i] ="0"+v[i];
             }
+            if(i==n) break;
         }
+        for(string x:v) cout << x << " ";
+        cout << endl;
     }
 }
