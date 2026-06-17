@@ -1,46 +1,32 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
-int a[1005];
-int n,k;
-int check=0;
-vector<int> v;
-void in(){
+int a[11],x[11];
+int n,k,ok=0;
+void print(int m){
+    ok=1;
     cout << "[";
-    for(int i=0;i<v.size();i++){
-        cout << v[i] ;
-        if(i!=v.size()-1) cout << " ";
-    }
-    cout << "] ";
+    for(int i=1;i<m;i++) cout << x[i] << " ";
+    cout << x[m] << "] ";     
 }
-
-void back_track(int i,int sum){
-    if(i==n ){
-        if(sum==k){
-            in();
-            check=1;
-        }
-        return;
+void Try(int i,int sum,int pre){
+    for(int j=pre+1;j<=n;j++){
+        if(sum+a[j]>k) continue;
+        x[i]=a[j];
+        if(sum+a[j]==k) print(i);
+        else Try(i+1,sum+a[j],j);
     }
-    if(sum+a[i]<=k){
-            v.push_back(a[i]);
-            back_track(i+1,sum+a[i]);
-            v.pop_back();
-        }
-    back_track(i+1,sum);
 }
 int main(){
     int t;cin >> t;
-    while (t--){
-        v.clear();
-        check=0;
-        cin >> n >> k;
-        for(int i=0;i<n;i++){
+    while(t--){
+        cin >> n >>k;
+        for(int i=1;i<=n;i++){
             cin >> a[i];
         }
-        sort(a,a+n);
-        back_track(0,0);
-        if(!check)  cout << -1;
+        sort(a+1,a+n+1);
+        ok=0;
+        Try(1,0,0);
+        if(!ok) cout << "-1";
         cout << endl;
-
     }
 }
