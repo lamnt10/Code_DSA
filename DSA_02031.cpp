@@ -5,12 +5,14 @@ int a[105];
 int kq[105];
 int vs[105];
 int k;
+int ck[256];
+
 bool check(){
-    if(c<'E') return true;
-    for(int i=1;i<k;i++){
-        if((kq[i]==65||kq[i]==69) && (kq[i+1]==65 || kq[i+1]==69)) return true;
+    ck['A']=ck['E']=1;
+    for(int i=2;i<k;i++){
+        if(!ck[kq[i-1]] && ck[kq[i]] && !ck[kq[i+1]]) return false;
     }
-    return false;
+    return true;
 }
 void in(){
 if(check())
