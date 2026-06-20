@@ -1,48 +1,40 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
 struct node{
-    char val;
+    char d;
     node *left,*right;
-    node(char x){
-        val=x;
-        left=right=NULL;
+    node(char c){
+        this->d = c;
     }
 };
-bool check(char c){
-    return c=='+' || c=='-' || c=='*' || c=='/';
+void inOrder(node *root){
+    if(root==NULL) return;
+    inOrder(root->left);
+    cout << root->d ;
+    inOrder(root->right);
 }
-void inorder(node *root){
-    if (root==NULL) return;
-    inorder(root->left);
-    cout<<root->val <<" ";
-    inorder(root->right);
-}
-void solve (string s){
-    stack<node* > st;
-    node *root;
-    for (int i=0;i<s.length();i++){
-        if (!check(s[i])){
-            st.push(new node(s[i]));
-        }
-        else {
-            node *tmp=new node(s[i]);
-            node *n1 = st.top();
-            st.pop();
-            node *n2 = st.top();
-            st.pop();
-            tmp->left = n2;
-            tmp->right = n1;
-            st.push(tmp);
-            }
-    }
-    root = st.top();
-    inorder(root);
-}
+
 int main(){
     int t;cin >> t;
-    while (t--){
-        string s;cin >> s;
-        solve(s);
-        cout << endl;
+    while(t--){
+    string s;cin >> s;
+    stack<node*> st;
+    for(char c:s){
+        if(isalpha(c)){
+            st.push(new node(c));
+        }
+        else{
+            node *r=st.top();st.pop();
+            node *l=st.top();st.pop();
+            node *tmp=new node(c);
+            tmp->left=l;
+            tmp->right=r;
+            st.push(tmp);
+        }
     }
+    inOrder(st.top());
+    cout << endl;
+    }
+
+
 }

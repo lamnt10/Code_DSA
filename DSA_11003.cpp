@@ -1,28 +1,44 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
-int search(int in[],int x,int n){
-    for (int i=0;i<n;i++){
-        if(in[i]==x) return i;
+int cur;
+map<int,int> idx ;
+struct node{
+    int val;
+    node *l=NULL,*r=NULL;
+    node(int x){
+        this->val=x;
     }
-    return -1;
+};
+int pre[1005],in[1005];
+node* nd(int l,int r) {
+    if(l>r) return NULL;
+    node *root=new node(pre[cur]);
+    int m=idx[pre[cur]];cur++;
+    root->l=nd(l,m-1);
+    root->r=nd(m+1,r);
+    return root;
 }
-void postorder(int in[],int pre[],int n){
-    int root = search(in,pre[0],n);
-    if (root != 0){
-        postorder(in,pre+1,root);
-    }
-    if (root != n-1) postorder(in+root+1,pre+root+1,n-root-1);
-    cout << pre[0] << " ";
+void print(node *root){
+    if(root==NULL) return;
+    print(root->l);
+    print(root->r);
+    cout << root->val <<" ";
 }
 int main(){
-    int t;cin >> t ;
-    while (t--){
+    int t;cin>>t;
+    while(t--){
         int n;cin >> n;
-        int in[n],pre[n];
-        for (int &x:in) cin >> x;
-        for (int &x:pre) cin >> x;
-        postorder(in,pre,n);
+        for(int i=0;i<n;i++){
+            cin >> in[i];
+            idx[in[i]]=i;
+        }
+        for(int i=0;i<n;i++){
+            cin >> pre[i];
+        }
+        cur=0;
+        node *root=nd(0,n-1);
+        print(root);
+        idx.clear();
         cout << endl;
     }
-
 }

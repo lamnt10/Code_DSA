@@ -1,41 +1,43 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
+int lev[1005],in[1005];
+map<int,int> idx;
 int n;
-int in[1001],level[1001],mark[1001];
-void inp(){
-    cin >> n;
-    for (int i=1;i<=n;i++){
-        cin >> in[i];
-        mark[in[i]]=i;
+struct node{
+    int val;
+    node *l=NULL,*r=NULL;
+    node(int x){
+        this->val=x;
     }
-    for (int i=1;i<=n;i++){
-        cin >> level[i];
-    }
+};
+node* build(int i,int l,int r){
+    if(i>=n && l>r) return NULL;
+    node *root = new node(lev[i]);
+    int m=idx[lev[i]];
+    root->l=build(2*i+1,l,m-1);
+    root->r=build(2*i+2,m+1,r);
+    return root;
 }
-void postorder(int l,int r){
-    if (l>r) return ;
-    else if (l==r){
-        cout << in[l] <<" ";
-    }
-    else {
-        int pos;
-        for (int i=1;i<=n;i++){
-            if (mark[level[i]] >=l && mark[level[i]] <=r){
-                pos = level[i];break;
-            }
-        }
-        pos=mark[pos];
-        postorder(l,pos-1);
-        postorder(pos+1,r);
-        cout << in[pos] << " ";
-
-    }
+void postOrder(node *root){
+    if(root==NULL) return;
+    postOrder(root->l);
+    postOrder(root->r);
+    cout << root->val << " ";
 }
 int main(){
     int t;cin >> t;
-    while (t--){
-        inp();
-        postorder(1,n);
+    while(t--){
+        cin >> n;
+        for(int i=0;i<n;i++){
+            cin >> in[i];
+            idx[in[i]]=i;
+        }
+        for(int i=0;i<n;i++){
+            cin >> lev[i];
+        }
+        node *root=build(0,0,n-1);
+        postOrder(root);
         cout << endl;
+        idx.clear();
     }
 }
