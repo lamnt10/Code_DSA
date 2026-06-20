@@ -1,51 +1,58 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
+int n,par,chi;
+char c;
 struct node{
     int val;
-    node *left,*right;
+    node *l=NULL,*r=NULL;
     node(int x){
-        val=x;
-        left = right = NULL;
+        this->val=x;
     }
 };
-void makenode (node *root, int u,int v,char c){
-    if (c=='L') root->left = new node(v);
-    if (c=='R') root->right = new node(v);
+void build(node *root){
+    if(root==NULL) return;
+    if(root->val==par){
+        if(c=='L') root->l=new node(chi);
+        else root->r=new node(chi);
+    }
+    else {
+        build(root->l);
+        build(root->r);
+    }
 }
-void insert(node *root,int u,int v,char c){
-    if (root == NULL) return ;
-    if (root->val == u) makenode(root,u,v,c);
-    insert(root->left,u,v,c);
-    insert(root->right,u,v,c);
-}
-int height(node *root){
-    if (root == NULL) return 0;
-    else  return 1 + max(height(root->left),height(root->right));
-}
-bool check(node *root,int level,int h){
-    if (root == NULL) return true;
-    if (root->left == NULL && root->right == NULL && level<h) return false;
-    return check(root->left , level+1, h) && check(root->right,level+1,h); 
-    
+bool ok;
+int firstlev;
+void travell(node *root,int lev){
+    if(root==NULL) return;
+    if(root->l==NULL && root->r == NULL) {
+        if(firstlev==-1) firstlev=lev;
+        else{
+            if(firstlev!=lev) {
+                ok=0;
+                return;
+            }
+        }
+    }
+    else{
+        travell(root->l,lev+1);
+        travell(root->r,lev+1);
+    }
 }
 int main(){
     int t;cin >> t;
-    while (t--){
-      int n;cin>> n;
-      node *root= NULL;
-      while (n--){
-        int u,v ;char c;
-        cin >> u >> v >> c;
-        if (root == NULL) {
-            root = new node(u);
-            makenode(root,u,v,c);
+    while(t--){
+        cin >> n;
+        node *root=NULL;
+        while(n--){
+            cin >> par >> chi >> c;
+            if(root==NULL){
+                root=new node(par);
+            }
+            build(root);
         }
-        else {
-            insert(root,u,v,c);
-        }
-      }  
-      int h=height(root);
-      if(check(root,1,h)) cout << 1 << endl;
-      else cout << 0 << endl;
+        ok=1,firstlev=-1;
+        travell(root,1);
+        if(ok) cout << 1 << endl;
+        else cout << 0 << endl;
     }
 }

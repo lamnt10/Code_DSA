@@ -1,60 +1,57 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
+int n,par,chi;
+char c;
 struct node{
     int val;
-    node *left,*right;
-    node (int x){
-        val=x;
-        left=right=NULL;
+    node *l=NULL,*r=NULL;
+    node(int x){
+        this->val=x;
     }
 };
-void makenode (node *root,int a,int b,char c){
-    if (c=='L') root->left=new node(b);
-    else root->right=new node(b);
-}
-void insert(node *root,int a,int b , char c){
-    if (root == NULL) return ;
-    if (root->val == a) makenode(root,a,b,c);
-    else {
-        insert(root->left,a,b,c);
-        insert(root->right,a,b,c);
+void build(node *root){
+    if(root==NULL) return;
+    if(root->val==par){
+        if(c=='L' ) root->l=new node(chi);
+        else root->r= new node(chi);
+    }
+    else{
+        build(root->l);
+        build(root->r);
     }
 }
-void spiralorder(node *root){
-    stack<node*> s1,s2;
-    s1.push(root);
-    while (!s1.empty() || !s2.empty()){
-        while (!s1.empty()){
-            node *tmp=s1.top();
-            s1.pop();
+void duyet(node *root){
+    stack<node*> st1,st2;
+    st1.push(root);
+    while(!st1.empty() || !st2.empty())
+    {
+        while(!st1.empty()){
+            node *tmp=st1.top();
+            st1.pop();
+            if(tmp->r!=NULL) st2.push(tmp->r);
+            if(tmp->l!=NULL) st2.push(tmp->l);
             cout << tmp->val << " ";
-            if (tmp->right!= NULL) s2.push(tmp->right);
-            if (tmp->left!= NULL) s2.push(tmp->left);
         }
-        while (!s2.empty()){
-            node *tmp=s2.top();
-            s2.pop();
+        while(!st2.empty()){
+            node*tmp=st2.top();
+            st2.pop();
+            if(tmp->l!=NULL) st1.push(tmp->l);
+            if(tmp->r!=NULL) st1.push(tmp->r);
             cout << tmp->val << " ";
-            if (tmp->left !=NULL) s1.push(tmp->left);
-            if (tmp->right !=NULL) s1.push(tmp->right);
         }
     }
 }
 int main(){
     int t;cin >> t;
-    while (t--){
-        int n;cin >> n;
+    while(t--){
+        cin >> n;
         node *root=NULL;
-        while (n--){
-            int a,b;char c;
-            cin >> a >> b >> c ;
-            if (root==NULL) {
-                root = new node(a);
-                makenode(root,a,b,c);
-            }
-            else insert(root,a,b,c);
+        while(n--){
+            cin >> par >> chi >> c;
+            if(root==NULL) root=new node(par);
+            build(root);
         }
-        spiralorder(root);
+        duyet(root);
         cout << endl;
     }
 }

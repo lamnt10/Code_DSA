@@ -1,56 +1,65 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
+int n;
+int par,chi;
+char c;
 struct node{
     int val;
-    node *left , *right;
-    node (int x){
-        val=x;
-        left = right = NULL;
+    node *l=NULL,*r=NULL;
+    node(int x){
+        this->val=x;
     }
 };
-void makenode (node *root , int a,int b,char c){
-    if (c=='L') root->left = new node(b);
-    if (c=='R') root->right = new node(b);
-}
-void insert(node *root,int a,int b,char c){
-    if (root == NULL) return;
-    if (root->val == a) makenode (root,a,b,c);
+void build(node *root){
+    if(root==NULL) return;
+    if(root->val==par){
+        if(c=='L') root->l=new node(chi);
+        else root->r=new node(chi);
+    }
     else{
-        insert(root->left,a,b,c);
-        insert(root->right,a,b,c);
+        build(root->l);
+        build(root->r);
     }
 }
-int height(node *root){
-    if (root == NULL) return 0;
-    else return 1+max(height(root->left),height(root->right));
-}
-bool check(node *root,int level,int h){
-    if (root==NULL) return true;
-    if (root->left == NULL && root->right == NULL && level<h) return false;
-    return check(root->left , level+1, h) && check(root->right,level+1,h);
-}
-bool check2(node *root){
-    if (root == NULL) return true;
-    if ((root->left == NULL && root->right!=NULL) || (root->left!=NULL && root->right== NULL)) return false;
-    return check2(root->left) && check2(root->right);
+bool ok;
+int firstlev;
+void duyet(node *root,int lev){
+    if(root==NULL) return;
+    if(root->l==NULL && root->r==NULL ){
+        if(firstlev==-1){
+            firstlev=lev;
+        }
+        else {
+            if(firstlev!=lev){
+                ok=0;
+                return;
+            }
+        }
+    }
+    else if((root->l==NULL && root->r!=NULL) || (root->l!=NULL && root->r==NULL)){
+        ok=0;
+        return;
+    }
+    else{
+        duyet(root->l,lev+1);
+        duyet(root->r,lev+1);
+    }
 }
 int main(){
     int t;cin >> t;
-    while (t--){
-        int n;cin >> n;
+    while(t--){
+        cin >> n;
         node *root=NULL;
-        while (n--){
-            int a,b;char c;
-            cin >> a >> b >> c;
-            if (root==NULL){
-                root = new node(a);
-                makenode(root,a,b,c);
-            }
-            else insert(root,a,b,c);
+        while(n--){
+             cin >> par >> chi >> c;
+             if(root==NULL){
+                root=new node(par);
+             }
+             build(root);
         }
-        int h=height(root);
-        if (check(root,1,h)&&check2(root)) cout << "Yes" << endl;
-        else cout << "No" <<endl;
-
+        ok=1;firstlev=-1;
+        duyet(root,1);
+        if(ok) cout << "Yes\n";
+        else cout << "No\n";
     }
 }
