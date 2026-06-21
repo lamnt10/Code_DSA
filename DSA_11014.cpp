@@ -10,17 +10,18 @@ struct node{
         this->val=x;
     }
 };
-void build(node *root){
-    if(root==NULL) return;
-    if(root->val==par){
-        if(c=='L') root->l=new node(chi);
-        else root->r=new node(chi);
-    }
-    else{
-        build(root->l);
-        build(root->r);
-    }
-}
+map<int,node*> mp;
+// void build(node *root){
+//     if(root==NULL) return;
+//     if(root->val==par){
+//         if(c=='L') root->l=new node(chi);
+//         else root->r=new node(chi);
+//     }
+//     else{
+//         build(root->l);
+//         build(root->r);
+//     }
+// }
 bool isleaf(node *root){
     if(root->l == NULL && root->r == NULL ) return true;
     return false;
@@ -33,16 +34,31 @@ int calc(node *root){
     if(root->l !=NULL && !isleaf(root->l)) sum+=calc(root->l);
     return sum;
 }
+void connect(node *root,int u,int v,char x){
+    if(x=='L'){
+        mp[v]=new node(v);
+        mp[u]->l=mp[v];
+    }
+    else{
+        mp[v]=new node(v);
+        mp[u]->r=mp[v];
+    }
+}
 int main(){
     int t;cin >> t;
     while(t--){
         kq=0;
         cin >> n;
+        mp.clear();
         node*root=NULL;
         while(n--){
             cin >> par >> chi >> c;
-            if(root==NULL) root=new node(par);
-            build(root);
+            if(root==NULL){
+                root = new node(par);
+                mp[par]=root;
+                connect(root,par,chi,c);
+            }
+            else connect(root,par,chi,c);
         }
         
         cout << calc(root) << endl;
